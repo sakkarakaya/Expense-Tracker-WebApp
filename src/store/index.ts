@@ -10,8 +10,8 @@ interface AppState {
 
 const rootReducer = combineReducers({
     user: userReducer,
-    categories: () => {},
-    records: () => {}
+    // categories: () => {},
+    // records: () => {}
 })
 
 export default rootReducer
