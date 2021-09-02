@@ -1,10 +1,12 @@
 import React from "react";
-import { Form, Input, Button, Checkbox } from "antd";
-import { useHistory } from "react-router-dom";
+import { Form, Input, Button, Checkbox, Result } from "antd";
+import { useHistory, useLocation } from "react-router-dom";
 import api from "../utils/api";
 
 const Login = () => {
   const history = useHistory();
+  const location = useLocation<{ newSignUp?: boolean }>();
+  console.log({ location });
   const onFinish = async (values: any) => {
     console.log("Success:", values);
     try {
@@ -29,6 +31,13 @@ const Login = () => {
       onFinishFailed={onFinishFailed}
       autoComplete='off'
     >
+      {location.state?.newSignUp && (
+        <Result
+          status='success'
+          title='Successfully registered!'
+          subTitle='You can login now'
+        />
+      )}
       <Form.Item
         label='Username'
         name='username'
