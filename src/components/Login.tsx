@@ -1,25 +1,34 @@
 import React from "react";
 import { Form, Input, Button, Checkbox, Result } from "antd";
 import { useHistory, useLocation } from "react-router-dom";
+import { login } from "../store/actions/userAction";
 import api from "../utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { LoginForm } from "../types/user";
+import { AppState } from "../store";
+import { useEffect } from "react";
 
 const Login = () => {
   const history = useHistory();
   const location = useLocation<{ newSignUp?: boolean }>();
-  console.log({ location });
-  const onFinish = async (values: any) => {
-    console.log("Success:", values);
-    try {
-      await api.post("/users/login", values);
-      history.push("/");
-    } catch (error) {
-      console.log({ error });
-    }
+  const dispatch = useDispatch();
+
+  const { data, loading, error } = useSelector((state: AppState) => state.user);
+
+  const onFinish = (values: LoginForm) => {
+    dispatch(login(values));
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      history.push("/");
+    }
+  }, [data]);
 
   return (
     <Form
