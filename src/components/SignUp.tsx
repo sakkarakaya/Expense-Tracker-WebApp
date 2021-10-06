@@ -37,9 +37,6 @@ function SignUp() {
       onFinish={onFinish}
       validateMessages={validateMessages}
     >
-      <Form.Item name='fullname' label='Full Name'>
-        <Input />
-      </Form.Item>
       <Form.Item name='username' label='Username' rules={[{ required: true }]}>
         <Input />
       </Form.Item>
