@@ -13,7 +13,9 @@ const userReducer = (state: UserState = defaultState, action: UserAction) => {
         case "LOGIN_SUCCESS":
             return {...state, loading: false, data: action.payload}
         case "LOGIN_ERROR":
-            return {...state, loading: false, error: "Login failed!"}
+            return {...state, loading: false, error: "Invalid username or password!"}
+        case "LOGOUT": 
+            return {...state, data: {} as User}
         default:
             return state;
     }
