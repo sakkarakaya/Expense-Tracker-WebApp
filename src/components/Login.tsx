@@ -7,8 +7,11 @@ import { AppState } from "../store";
 import { useEffect } from "react";
 import showError from "../utils/showError";
 import showSuccess from "../utils/showSuccess";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation<{ newSignUp?: boolean }>();
   const dispatch = useDispatch();
@@ -24,8 +27,8 @@ const Login = () => {
   }, [error]);
 
   useEffect(() => {
-    data.username && showSuccess("Successfully logged in");
-  }, [data.username]);
+    data.username && showSuccess(`${t("loginSuccess")}`);
+  }, [data.username, t]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,54 +38,61 @@ const Login = () => {
   }, [data, history]);
 
   return (
-    <Form
-      name='basic'
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 16 }}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      autoComplete='off'
+    <motion.div
+      initial={{ opacity: 0, x: "100%" }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: "100%" }}
+      transition={{ type: "spring", delay: 0.3 }}
     >
-      {location.state?.newSignUp && (
-        <Result
-          status='success'
-          title='Successfully registered!'
-          subTitle='You can login now'
-        />
-      )}
-      <Form.Item
-        label='Username'
-        name='username'
-        rules={[{ required: true, message: "Please input your username!" }]}
+      <Form
+        name='basic'
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 16 }}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        autoComplete='off'
       >
-        <Input />
-      </Form.Item>
+        {location.state?.newSignUp && (
+          <Result
+            status='success'
+            title={t("registerSuccess")}
+            subTitle={t("registerSuccessText")}
+          />
+        )}
+        <Form.Item
+          label={t("username")}
+          name='username'
+          rules={[{ required: true, message: "Please input your username!" }]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        label='Password'
-        name='password'
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input.Password />
-      </Form.Item>
+        <Form.Item
+          label={t("password")}
+          name='password'
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
 
-      <Form.Item
-        name='remember'
-        valuePropName='checked'
-        wrapperCol={{ offset: 8, span: 16 }}
-      >
-        <Checkbox>Remember me</Checkbox>
-        <Button onClick={() => history.push("/register")}>
-          Don't have an account?
-        </Button>
-      </Form.Item>
+        <Form.Item
+          name='remember'
+          valuePropName='checked'
+          wrapperCol={{ offset: 8, span: 16 }}
+        >
+          <Checkbox>{t("remember")}</Checkbox>
+          <Button onClick={() => history.push("/register")}>
+            {t("NoAccount")}
+          </Button>
+        </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type='primary' htmlType='submit'>
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type='primary' htmlType='submit'>
+            {t("submit")}
+          </Button>
+        </Form.Item>
+      </Form>
+    </motion.div>
   );
 };
 
