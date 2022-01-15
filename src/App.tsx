@@ -23,15 +23,28 @@ import { AppState } from "./store";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { useTranslation } from "react-i18next";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
 
 const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 
-const lngs: any = {
-  en: "English",
-  de: "Deutsch",
-  tr: "Türkçe",
-};
+const lngsArray = [
+  {
+    language: "English",
+    code: "en",
+    flagCode: "us",
+  },
+  {
+    language: "Deutsch",
+    code: "de",
+    flagCode: "de",
+  },
+  {
+    language: "Türkçe",
+    code: "tr",
+    flagCode: "tr",
+  },
+];
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -108,22 +121,26 @@ function App() {
                   </Menu.Item>
                 </React.Fragment>
               )}
+
               <Menu.Item key='/lang' style={{ float: "right" }}>
                 <Select
                   defaultValue={i18n.resolvedLanguage}
-                  style={{ width: 100 }}
+                  style={{ width: 120 }}
                   onChange={handleChange}
                 >
-                  {Object.keys(lngs).map((lng) => (
+                  {lngsArray.map(({ language, code, flagCode }) => (
                     <Option
-                      key={lng}
-                      value={lng}
+                      key={code}
+                      value={code}
                       style={{
                         fontWeight:
-                          i18n.resolvedLanguage === lng ? "bold" : "normal",
+                          i18n.resolvedLanguage === code ? "bold" : "normal",
                       }}
                     >
-                      {lngs[lng]}
+                      <span style={{ marginRight: 10 }}>
+                        {getUnicodeFlagIcon(`${flagCode}`)}
+                      </span>
+                      {language}
                     </Option>
                   ))}
                 </Select>
@@ -197,7 +214,7 @@ function App() {
           <Footer style={{ textAlign: "center" }}>
             © {new Date().getFullYear()}
           </Footer>
-          <div>
+          {/* <div>
             {Object.keys(lngs).map((lng) => (
               <button
                 key={lng}
@@ -210,7 +227,7 @@ function App() {
                 {lngs[lng]}
               </button>
             ))}
-          </div>
+          </div> */}
         </Layout>
       </CartProvider>
     </TodoContextProvide>
