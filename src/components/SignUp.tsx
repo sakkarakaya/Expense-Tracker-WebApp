@@ -3,6 +3,8 @@ import { Form, Input, Button } from "antd";
 import api from "../utils/api";
 import { useHistory } from "react-router-dom";
 import showError from "../utils/showError";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const layout = {
   labelCol: { span: 4 },
@@ -21,6 +23,7 @@ const layout = {
 // };
 
 function SignUp() {
+  const { t } = useTranslation();
   const history = useHistory();
 
   const onFinish = async (values: any) => {
@@ -33,35 +36,46 @@ function SignUp() {
     }
   };
   return (
-    <Form
-      {...layout}
-      name='nest-messages'
-      onFinish={onFinish}
-      // validateMessages={validateMessages}
+    <motion.div
+      initial={{ opacity: 0, x: "100%" }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: "100%" }}
+      transition={{ type: "spring", delay: 0.3 }}
     >
-      <Form.Item name='username' label='Username' rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name='email'
-        label='Email'
-        rules={[{ type: "email", required: true }]}
+      <Form
+        {...layout}
+        name='nest-messages'
+        onFinish={onFinish}
+        // validateMessages={validateMessages}
       >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label='Password'
-        name='password'
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input.Password />
-      </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button type='primary' htmlType='submit'>
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          name='username'
+          label={t("username")}
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name='email'
+          label={t("email")}
+          rules={[{ type: "email", required: true }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label={t("password")}
+          name='password'
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Button type='primary' htmlType='submit'>
+            {t("submit")}
+          </Button>
+        </Form.Item>
+      </Form>
+    </motion.div>
   );
 }
 
