@@ -22,8 +22,10 @@ import { Record, RecordForm } from "../types/record";
 import { Category } from "../types/category";
 import { getCategories } from "../store/actions/categoryAction";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const Records = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const { data, loading, error } = useSelector(
@@ -82,19 +84,19 @@ const Records = () => {
 
   const columns = [
     {
-      title: "Title",
+      title: `${t("title")}`,
       dataIndex: "title",
       key: "title",
       render: (text: string) => <p>{text}</p>,
     },
     {
-      title: "Amount",
+      title: `${t("amount")}`,
       dataIndex: "amount",
       key: "amount",
       render: (text: number) => <p>{text}</p>,
     },
     {
-      title: "Category",
+      title: `${t("category")}`,
       dataIndex: "category",
       key: "category",
       render: (category: Category, record: Record) => {
@@ -106,7 +108,7 @@ const Records = () => {
       },
     },
     {
-      title: "Action",
+      title: `${t("action")}`,
       dataIndex: "id",
       key: "action",
       render: (text: string, record: Record) => {
@@ -122,7 +124,7 @@ const Records = () => {
                 setEditId(record.id);
               }}
             >
-              Edit
+              {t("edit")}
             </Button>
 
             <Popconfirm
@@ -136,7 +138,7 @@ const Records = () => {
                 style={{ color: "red" }}
                 onClick={() => setDeleteId(record.id)}
               >
-                Delete
+                {t("delete")}
               </a>
             </Popconfirm>
           </Space>
@@ -160,25 +162,30 @@ const Records = () => {
         }}
       >
         <Button type='primary' onClick={() => showModal("add")}>
-          Add a new record
+          {t("addRecord")}
         </Button>
       </div>
       <Modal
-        title={isModalVisible.mode === "add" ? "New Record" : "Edit Record"}
+        title={
+          isModalVisible.mode === "add"
+            ? `${t("newRecord")}`
+            : `${t("editRecord")}`
+        }
         visible={isModalVisible.show}
         onOk={handleOk}
         onCancel={handleCancel}
+        cancelText={t("cancel")}
         okButtonProps={{ disabled: invalidForm }}
       >
         <Form labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
-          <Form.Item label='Title'>
+          <Form.Item label={t("title")}>
             <Input
               name='title'
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
             />
           </Form.Item>
-          <Form.Item label='Amount'>
+          <Form.Item label={t("amount")}>
             <Input
               name='amount'
               value={form.amount}
@@ -188,14 +195,14 @@ const Records = () => {
               }
             />
           </Form.Item>
-          <Form.Item label='Category'>
+          <Form.Item label={t("category")}>
             <Select
               defaultValue={form.category_id}
               value={form.category_id}
               onChange={(e) => setForm({ ...form, category_id: e })}
             >
               <Select.Option value={0} disabled>
-                Select a category
+                {t("selectCategory")}
               </Select.Option>
               {categories.map((c) => (
                 <Select.Option value={c.id} key={c.id}>

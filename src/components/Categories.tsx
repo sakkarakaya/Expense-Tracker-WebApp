@@ -19,8 +19,11 @@ import {
   getCategories,
 } from "../store/actions/categoryAction";
 import { AppState } from "../store";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const Categories = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector(
     (state: AppState) => state.categories
@@ -63,12 +66,12 @@ const Categories = () => {
 
   const columns = [
     {
-      title: "Name",
+      title: `${t("name")}`,
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Type",
+      title: `${t("type")}`,
       dataIndex: "type",
       key: "id",
       render: (text: string, category: Category) => {
@@ -80,7 +83,7 @@ const Categories = () => {
       },
     },
     {
-      title: "Actions",
+      title: `${t("action")}`,
       dataIndex: "id",
       key: "actions",
       render: (text: string, category: Category) => (
@@ -93,7 +96,7 @@ const Categories = () => {
               setEditId(category.id);
             }}
           >
-            Edit
+            {t("edit")}
           </Button>
 
           <Popconfirm
@@ -107,7 +110,7 @@ const Categories = () => {
               style={{ color: "red" }}
               onClick={() => setDeleteId(category.id)}
             >
-              Delete
+              {t("delete")}
             </a>
           </Popconfirm>
         </Space>
@@ -120,7 +123,12 @@ const Categories = () => {
   }, [dispatch]);
 
   return (
-    <React.Fragment>
+    <motion.div
+      initial={{ opacity: 0, y: "-100%" }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: "-100%" }}
+      transition={{ type: "spring", delay: 0.3 }}
+    >
       <div
         style={{
           display: "flex",
@@ -129,44 +137,49 @@ const Categories = () => {
         }}
       >
         <Button type='primary' onClick={() => showModal("add")}>
-          Add a new category
+          {t("addCategory")}
         </Button>
       </div>
       <Modal
-        title={isModalVisible.mode === "add" ? "New Category" : "Edit Category"}
+        title={
+          isModalVisible.mode === "add"
+            ? `${t("newCategory")}`
+            : `${t("editCategory")}`
+        }
         visible={isModalVisible.show}
         onOk={handleOk}
         onCancel={handleCancel}
+        cancelText={t("cancel")}
         okButtonProps={{ disabled: !form.name }}
       >
         <Form labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
-          <Form.Item label='Name'>
+          <Form.Item label={t("name")}>
             <Input
               name='name'
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
           </Form.Item>
-          <Form.Item label='Type'>
+          <Form.Item label={t("type")}>
             <Select
               defaultValue='expense'
               value={form.type}
               onChange={(e) => setForm({ ...form, type: e })}
             >
-              <Select.Option value='income'>Income</Select.Option>
-              <Select.Option value='expense'>Expense</Select.Option>
+              <Select.Option value='income'>{t("income")}</Select.Option>
+              <Select.Option value='expense'>{t("expense")}</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label='Color'>
+          <Form.Item label={t("color")}>
             <Select
               defaultValue='red'
               value={form.color}
               onChange={(e) => setForm({ ...form, color: e })}
             >
-              <Select.Option value='red'>Red</Select.Option>
-              <Select.Option value='blue'>Blue</Select.Option>
-              <Select.Option value='green'>Green</Select.Option>
-              <Select.Option value='yellow'>Yellow</Select.Option>
+              <Select.Option value='red'>{t("red")}</Select.Option>
+              <Select.Option value='blue'>{t("blue")}</Select.Option>
+              <Select.Option value='green'>{t("green")}</Select.Option>
+              <Select.Option value='yellow'>{t("yellow")}</Select.Option>
             </Select>
           </Form.Item>
         </Form>
@@ -177,7 +190,7 @@ const Categories = () => {
         loading={loading}
         rowKey='id'
       />
-    </React.Fragment>
+    </motion.div>
   );
 };
 
